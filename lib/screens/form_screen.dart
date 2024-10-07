@@ -1,4 +1,6 @@
+import 'package:account_app/main.dart';
 import 'package:account_app/models/transactions.dart';
+import 'package:account_app/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:account_app/provider/transaction_provider.dart';
@@ -7,11 +9,8 @@ class FormScreen extends StatelessWidget {
   FormScreen({super.key});
 
   final formKey = GlobalKey<FormState>();
-  final brandController = TextEditingController();
+  final titleController = TextEditingController();
   final amountController = TextEditingController();
-  final modelController = TextEditingController();
-  final sizeController = TextEditingController();
-  final typeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -21,99 +20,72 @@ class FormScreen extends StatelessWidget {
         ),
         body: Form(
             key: formKey,
-            child: Column(
-              children: [
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'ประเภทรองเท้า',
-                  ),
-                  autofocus: true,
-                  controller: typeController,
-                  validator: (String? str) {
-                    if (str!.isEmpty) {
-                      return 'กรุณากรอกข้อมูล';
-                    }
-                  },
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'แบรนด์รองเท้า',
-                  ),
-                  controller: brandController,
-                  validator: (String? str) {
-                    if (str!.isEmpty) {
-                      return 'กรุณากรอกข้อมูล';
-                    }
-                  },
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'ชื่อรุ่น',
-                  ),
-                  controller: modelController,
-                  validator: (String? str) {
-                    if (str!.isEmpty) {
-                      return 'กรุณากรอกข้อมูล';
-                    }
-                  },
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'ขนาดรองเท้า(UK)',
-                  ),
-                  keyboardType: TextInputType.number,
-                  controller: sizeController,
-                  validator: (String? input) {
-                    try {
-                      double amount = double.parse(input!);
-                      if (amount < 0) {
-                        return 'กรุณากรอกข้อมูลมากกว่า 0';
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'ชื่อรายการ',
+                      border: OutlineInputBorder(),
+                    ),
+                    autofocus: false,
+                    controller: titleController,
+                    validator: (String? str) {
+                      if (str!.isEmpty) {
+                        return 'กรุณากรอกข้อมูล';
                       }
-                    } catch (e) {
-                      return 'กรุณากรอกข้อมูลเป็นตัวเลข';
-                    }
-                  },
-                ),
-                TextFormField(
-                  decoration: const InputDecoration(
-                    labelText: 'จำนวนเงิน',
+                    },
                   ),
-                  keyboardType: TextInputType.number,
-                  controller: amountController,
-                  validator: (String? input) {
-                    try {
-                      double amount = double.parse(input!);
-                      if (amount < 0) {
-                        return 'กรุณากรอกข้อมูลมากกว่า 0';
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'จำนวนเงิน',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                    controller: amountController,
+                    validator: (String? input) {
+                      try {
+                        double amount = double.parse(input!);
+                        if (amount < 0) {
+                          return 'กรุณากรอกข้อมูลมากกว่า 0';
+                        }
+                      } catch (e) {
+                        return 'กรุณากรอกข้อมูลเป็นตัวเลข';
                       }
-                    } catch (e) {
-                      return 'กรุณากรอกข้อมูลเป็นตัวเลข';
-                    }
-                  },
-                ),
-                TextButton(
-                    child: const Text('บันทึก'),
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        // create transaction data object
-                        var statement = Transactions(
-                            type: typeController.text,
-                            brand: brandController.text,
-                            model: modelController.text,
-                            size: double.parse(sizeController.text),
-                            amount: double.parse(amountController.text),
-                            date: DateTime.now());
+                    },
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextButton(
+                      child: const Text('บันทึก'),
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) {
+                          // create transaction data object
+                          var statement = Transactions(
+                              keyID: null,
+                              title: titleController.text,
+                              amount: double.parse(amountController.text),
+                              date: DateTime.now());
 
-                        // add transaction data object to provider
-                        var provider = Provider.of<TransactionProvider>(context,
-                            listen: false);
+                          // add transaction data object to provider
+                          var provider = Provider.of<TransactionProvider>(
+                              context,
+                              listen: false);
 
-                        provider.addTransaction(statement);
+                          provider.addTransaction(statement);
 
-                        Navigator.pop(context);
-                      }
-                    })
-              ],
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  fullscreenDialog: true,
+                                  builder: (context) {
+                                    return MyHomePage();
+                                  }));
+                        }
+                      })
+                ],
+              ),
             )));
   }
 }

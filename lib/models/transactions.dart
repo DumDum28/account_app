@@ -1,18 +1,12 @@
 class Transactions {
-  // final String id;
-  final String brand;
-  final String type;
-  final String model;
-  final double size;
+  final int? keyID;
+  final String title;
   final double amount;
   final DateTime date;
 
   Transactions({
-    // required this.id,
-    required this.brand,
-    required this.type,
-    required this.model,
-    required this.size,
+    this.keyID,
+    required this.title,
     required this.amount,
     required this.date,
   });
