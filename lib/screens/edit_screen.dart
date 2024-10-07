@@ -1,6 +1,7 @@
 import 'package:account_app/main.dart';
 import 'package:account_app/models/transactions.dart';
 import 'package:account_app/provider/transaction_provider.dart';
+import 'package:account_app/screens/show_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -82,7 +83,7 @@ class _EditScreenState extends State<EditScreen> {
                             MaterialPageRoute(
                                 fullscreenDialog: true,
                                 builder: (context) {
-                                  return MyHomePage();
+                                  return showData(statement: statement);
                                 }));
                       }
                     })
