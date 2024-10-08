@@ -24,7 +24,10 @@ class TransactionDB {
     var store = intMapStoreFactory.store('expense');
 
     var keyID = store.add(db, {
-      "title": statement.title,
+      "type": statement.type,
+      "brand": statement.brand,
+      "model": statement.model,
+      "size": statement.size,
       "amount": statement.amount,
       "date": statement.date.toIso8601String()
     });
@@ -41,7 +44,10 @@ class TransactionDB {
     for (var record in snapshot) {
       transactions.add(Transactions(
           keyID: record.key,
-          title: record['title'].toString(),
+          type: record['type'].toString(),
+          brand: record['brand'].toString(),
+          model: record['model'].toString(),
+          size: double.parse(record['size'].toString()),
           amount: double.parse(record['amount'].toString()),
           date: DateTime.parse(record['date'].toString())));
     }
@@ -61,7 +67,10 @@ class TransactionDB {
     var store = intMapStoreFactory.store('expense');
     var filter = Finder(filter: Filter.equals(Field.key, statement.keyID));
     var result = store.update(db, finder: filter, {
-      "title": statement.title,
+      "type": statement.type,
+      "brand": statement.brand,
+      "model": statement.model,
+      "size": statement.size,
       "amount": statement.amount,
       "date": statement.date.toIso8601String()
     });

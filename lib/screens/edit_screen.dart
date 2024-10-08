@@ -17,12 +17,14 @@ class EditScreen extends StatefulWidget {
 
 class _EditScreenState extends State<EditScreen> {
   var formKey = GlobalKey<FormState>();
-  var titleController = TextEditingController();
-
+  var typeController = TextEditingController();
+  var brandController = TextEditingController();
+  var modelController = TextEditingController();
+  var sizeController = TextEditingController();
   var amountController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    titleController.text = widget.statement.title;
+    brandController.text = widget.statement.brand;
     amountController.text = widget.statement.amount.toString();
     return Scaffold(
         appBar: AppBar(
@@ -37,7 +39,7 @@ class _EditScreenState extends State<EditScreen> {
                     labelText: 'ชื่อรายการ',
                   ),
                   autofocus: false,
-                  controller: titleController,
+                  controller: brandController,
                   validator: (String? str) {
                     if (str!.isEmpty) {
                       return 'กรุณากรอกข้อมูล';
@@ -68,7 +70,10 @@ class _EditScreenState extends State<EditScreen> {
                         // create transaction data object
                         var statement = Transactions(
                             keyID: widget.statement.keyID,
-                            title: titleController.text,
+                            type: typeController.text,
+                            brand: brandController.text,
+                            model: modelController.text,
+                            size: double.parse(sizeController.text),
                             amount: double.parse(amountController.text),
                             date: DateTime.now());
 
@@ -77,14 +82,8 @@ class _EditScreenState extends State<EditScreen> {
                             listen: false);
 
                         provider.updateTransaction(statement);
-
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                fullscreenDialog: true,
-                                builder: (context) {
-                                  return showData(statement: statement);
-                                }));
+                        // เพิ่มปุ่ม pop
+                        Navigator.pop(context);
                       }
                     })
               ],

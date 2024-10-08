@@ -48,13 +48,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     margin:
                         const EdgeInsets.symmetric(vertical: 5, horizontal: 8),
                     child: ListTile(
-                      title: Text(statement.title),
-                      subtitle: Text(DateFormat('dd MMM yyyy hh:mm:ss')
-                          .format(statement.date)),
+                      title: Text('${statement.brand} ${statement.model}'),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('${statement.amount} บาท'), // แสดง amount
+                          Text(DateFormat('dd MMM yyyy hh:mm:ss')
+                              .format(statement.date)), // แสดง date
+                        ],
+                      ),
                       leading: CircleAvatar(
                         radius: 30,
                         child: FittedBox(
-                          child: Text('${statement.amount}'),
+                          child: Text('${statement.type}'),
                         ),
                       ),
                       trailing: IconButton(

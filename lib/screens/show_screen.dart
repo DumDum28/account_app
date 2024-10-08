@@ -1,9 +1,6 @@
 import 'package:account_app/models/transactions.dart';
 import 'package:flutter/material.dart';
 import 'package:account_app/screens/edit_screen.dart';
-import 'package:account_app/provider/transaction_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:account_app/screens/form_screen.dart';
 
 class showData extends StatelessWidget {
   final Transactions statement;
@@ -14,29 +11,43 @@ class showData extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('ข้อมูลที่แสดง'),
+        title: Text('รายละเอียด'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'นี่คือข้อมูลที่คุณต้องการดู',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            const Text(
+              'ชื่อรายการ:',
+              style: TextStyle(fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 8.0),
             Text(
-              'ข้อมูลตัวอย่าง:',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              statement.brand,
+              style: const TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 16.0),
+            const Text(
+              'จำนวนเงิน:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8.0),
             Text(
-              '1. ข้อมูลแรก\n'
-              '2. ข้อมูลที่สอง\n'
-              '3. ข้อมูลที่สาม\n',
-              style: TextStyle(fontSize: 18),
+              statement.amount.toString(),
+              style: const TextStyle(fontSize: 16),
             ),
+            const SizedBox(height: 16.0),
+            const Text(
+              'วันที่ทำรายการ:',
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 8.0),
+            Text(
+              statement.date.toString(),
+              style: const TextStyle(fontSize: 16),
+            ),
+            const SizedBox(height: 20.0),
             SizedBox(height: 20),
             Row(
               mainAxisAlignment:

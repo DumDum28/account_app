@@ -8,9 +8,12 @@ import 'package:account_app/provider/transaction_provider.dart';
 class FormScreen extends StatelessWidget {
   FormScreen({super.key});
 
-  final formKey = GlobalKey<FormState>();
-  final titleController = TextEditingController();
-  final amountController = TextEditingController();
+  var formKey = GlobalKey<FormState>();
+  var typeController = TextEditingController();
+  var brandController = TextEditingController();
+  var modelController = TextEditingController();
+  var sizeController = TextEditingController();
+  var amountController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -26,11 +29,11 @@ class FormScreen extends StatelessWidget {
                 children: [
                   TextFormField(
                     decoration: const InputDecoration(
-                      labelText: 'ชื่อรายการ',
+                      labelText: 'ประเภทรองเท้า',
                       border: OutlineInputBorder(),
                     ),
                     autofocus: false,
-                    controller: titleController,
+                    controller: typeController,
                     validator: (String? str) {
                       if (str!.isEmpty) {
                         return 'กรุณากรอกข้อมูล';
@@ -40,7 +43,54 @@ class FormScreen extends StatelessWidget {
                   const SizedBox(height: 16.0),
                   TextFormField(
                     decoration: const InputDecoration(
-                      labelText: 'จำนวนเงิน',
+                      labelText: 'ชื่อแบรนด์',
+                      border: OutlineInputBorder(),
+                    ),
+                    autofocus: false,
+                    controller: brandController,
+                    validator: (String? str) {
+                      if (str!.isEmpty) {
+                        return 'กรุณากรอกข้อมูล';
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'ชื่อรุ่น',
+                      border: OutlineInputBorder(),
+                    ),
+                    autofocus: false,
+                    controller: modelController,
+                    validator: (String? str) {
+                      if (str!.isEmpty) {
+                        return 'กรุณากรอกข้อมูล';
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'ขนาดรองเท้า (UK)',
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.number,
+                    controller: sizeController,
+                    validator: (String? input) {
+                      try {
+                        double amount = double.parse(input!);
+                        if (amount < 0) {
+                          return 'กรุณากรอกข้อมูลมากกว่า 0';
+                        }
+                      } catch (e) {
+                        return 'กรุณากรอกข้อมูลเป็นตัวเลข';
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 16.0),
+                  TextFormField(
+                    decoration: const InputDecoration(
+                      labelText: 'จำนวนเงิน (บาท)',
                       border: OutlineInputBorder(),
                     ),
                     keyboardType: TextInputType.number,
@@ -64,7 +114,10 @@ class FormScreen extends StatelessWidget {
                           // create transaction data object
                           var statement = Transactions(
                               keyID: null,
-                              title: titleController.text,
+                              type: typeController.text,
+                              brand: brandController.text,
+                              model: modelController.text,
+                              size: double.parse(sizeController.text),
                               amount: double.parse(amountController.text),
                               date: DateTime.now());
 
