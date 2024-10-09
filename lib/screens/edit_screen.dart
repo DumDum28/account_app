@@ -24,7 +24,10 @@ class _EditScreenState extends State<EditScreen> {
   var amountController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    typeController.text = widget.statement.type;
     brandController.text = widget.statement.brand;
+    modelController.text = widget.statement.model;
+    sizeController.text = widget.statement.size.toString();
     amountController.text = widget.statement.amount.toString();
     return Scaffold(
         appBar: AppBar(
@@ -34,9 +37,25 @@ class _EditScreenState extends State<EditScreen> {
             key: formKey,
             child: Column(
               children: [
+                const SizedBox(height: 16.0),
                 TextFormField(
                   decoration: const InputDecoration(
-                    labelText: 'ชื่อรายการ',
+                    labelText: 'ประเภทรองเท้า',
+                    border: OutlineInputBorder(),
+                  ),
+                  autofocus: false,
+                  controller: typeController,
+                  validator: (String? str) {
+                    if (str!.isEmpty) {
+                      return 'กรุณากรอกข้อมูล';
+                    }
+                  },
+                ),
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'ชื่อแบรนด์',
+                    border: OutlineInputBorder(),
                   ),
                   autofocus: false,
                   controller: brandController,
@@ -46,9 +65,44 @@ class _EditScreenState extends State<EditScreen> {
                     }
                   },
                 ),
+                const SizedBox(height: 16.0),
                 TextFormField(
                   decoration: const InputDecoration(
-                    labelText: 'จำนวนเงิน',
+                    labelText: 'ชื่อรุ่น',
+                    border: OutlineInputBorder(),
+                  ),
+                  autofocus: false,
+                  controller: modelController,
+                  validator: (String? str) {
+                    if (str!.isEmpty) {
+                      return 'กรุณากรอกข้อมูล';
+                    }
+                  },
+                ),
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'ขนาดรองเท้า (UK)',
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                  controller: sizeController,
+                  validator: (String? input) {
+                    try {
+                      double amount = double.parse(input!);
+                      if (amount < 0) {
+                        return 'กรุณากรอกข้อมูลมากกว่า 0';
+                      }
+                    } catch (e) {
+                      return 'กรุณากรอกข้อมูลเป็นตัวเลข';
+                    }
+                  },
+                ),
+                const SizedBox(height: 16.0),
+                TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'จำนวนเงิน (บาท)',
+                    border: OutlineInputBorder(),
                   ),
                   keyboardType: TextInputType.number,
                   controller: amountController,
@@ -75,15 +129,16 @@ class _EditScreenState extends State<EditScreen> {
                             model: modelController.text,
                             size: double.parse(sizeController.text),
                             amount: double.parse(amountController.text),
-                            date: DateTime.now());
+                            date: widget.statement.date);
 
                         // add transaction data object to provider
                         var provider = Provider.of<TransactionProvider>(context,
                             listen: false);
 
                         provider.updateTransaction(statement);
+
                         // เพิ่มปุ่ม pop
-                        Navigator.pop(context);
+                        Navigator.pop(context, statement);
                       }
                     })
               ],

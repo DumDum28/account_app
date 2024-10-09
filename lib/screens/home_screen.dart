@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return showData(statement: statement);
+                              return ShowData(statement: statement);
                             },
                           ),
                         );
